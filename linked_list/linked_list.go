@@ -1,80 +1,76 @@
 package linked_list
 
-type Node struct {
-	val  int
-	next *Node
-	prev *Node
+type Node[T comparable] struct {
+	Val  T
+	next *Node[T]
+	prev *Node[T]
 }
 
-type LinkedList struct {
-	length int
-	head   *Node
-	tail   *Node
+type LinkedList[T comparable] struct {
+	Length int
+	Head   *Node[T]
+	Tail   *Node[T]
 }
 
-func NewLinkedList() *LinkedList {
-	return &LinkedList{length: 0}
+func NewLinkedList[T comparable]() *LinkedList[T] {
+	return &LinkedList[T]{Length: 0}
 }
 
-func (l *LinkedList) Prepend(val int) {
-	newNode := &Node{val: val}
-	l.length += 1
-	if l.head == nil {
-		l.head = newNode
-		l.tail = newNode
+func (l *LinkedList[T]) Prepend(val T) {
+	newNode := &Node[T]{Val: val}
+	l.Length += 1
+	if l.Head == nil {
+		l.Head = newNode
+		l.Tail = newNode
 	} else {
-		newNode.next = l.head
-		l.head.prev = newNode
-		l.head = newNode
+		newNode.next = l.Head
+		l.Head.prev = newNode
+		l.Head = newNode
 	}
 }
 
-func (l *LinkedList) Append(val int) {
-	newNode := &Node{val: val}
-	l.length += 1
-	if l.head == nil {
-		l.head = newNode
-		l.tail = newNode
+func (l *LinkedList[T]) Append(val T) {
+	newNode := &Node[T]{Val: val}
+	l.Length += 1
+	if l.Head == nil {
+		l.Head = newNode
+		l.Tail = newNode
 	} else {
-		l.tail.next = newNode
-		newNode.prev = l.tail
-		l.tail = newNode
+		l.Tail.next = newNode
+		newNode.prev = l.Tail
+		l.Tail = newNode
 	}
 }
 
-func (l *LinkedList) Pop() {
-	if l.tail == nil {
+func (l *LinkedList[T]) Pop() {
+	if l.Tail == nil {
 		return
 	}
-	l.length -= 1
-	l.tail = l.tail.prev
-	l.tail.next = nil
+	l.Length -= 1
+	l.Tail = l.Tail.prev
+	l.Tail.next = nil
 }
 
-func (l *LinkedList) Shift() {
-	if l.head == nil {
+func (l *LinkedList[T]) Shift() {
+	if l.Head == nil {
 		return
 	}
-	l.length -= 1
-	l.head = l.head.next
-	l.tail.prev = nil
+	l.Length -= 1
+	l.Head = l.Head.next
+	l.Tail.prev = nil
 }
 
-func (l *LinkedList) GetLen() int {
-	return l.length
-}
-
-func (l *LinkedList) GetValue(index int) *Node {
-	currValue := l.head
+func (l *LinkedList[T]) GetValue(index int) *Node[T] {
+	currValue := l.Head
 	for i := 0; currValue != nil && i < index; i++ {
 		currValue = currValue.next
 	}
 	return currValue
 }
 
-func (l *LinkedList) FindValue(value int) *Node {
-	currValue := l.head
-	for currValue != nil && currValue.val != value {
+func (l *LinkedList[T]) FindValue(value T) *Node[T] {
+	currValue := l.Head
+	for currValue != nil && currValue.Val != value {
 		currValue = currValue.next
 	}
 	return currValue
