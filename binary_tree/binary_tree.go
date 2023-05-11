@@ -1,42 +1,48 @@
 package binary_tree
 
-type TreeNode struct {
-	val   int
-	left  *TreeNode
-	right *TreeNode
+type Comparable interface {
+	Less(other Comparable) bool
+	More(other Comparable) bool
+	Equal(other Comparable) bool
 }
 
-func MakeBST(rootVal int) *TreeNode {
-	return &TreeNode{val: rootVal}
+type TreeNode[T Comparable] struct {
+	val   T
+	left  *TreeNode[T]
+	right *TreeNode[T]
 }
 
-func (t *TreeNode) Insert(value int) {
-	if value < t.val {
+func MakeBST[T Comparable](rootVal T) *TreeNode[T] {
+	return &TreeNode[T]{val: rootVal}
+}
+
+func (t *TreeNode[T]) Insert(value T) {
+	if value.Less(t.val) {
 		if t.left == nil {
-			t.left = &TreeNode{val: value}
+			t.left = &TreeNode[T]{val: value}
 		} else {
 			t.left.Insert(value)
 		}
-	} else if value > t.val {
+	} else if value.More(t.val) {
 		if t.right == nil {
-			t.right = &TreeNode{val: value}
+			t.right = &TreeNode[T]{val: value}
 		} else {
 			t.right.Insert(value)
 		}
 	}
 }
 
-func (t *TreeNode) Search(value int) *TreeNode {
-	if t == nil || t.val == value {
+func (t *TreeNode[T]) Search(value T) *TreeNode[T] {
+	if t == nil || value.Equal(t.val) {
 		return t
-	} else if t.val < value {
+	} else if value.More(t.val) {
 		return t.right.Search(value)
 	} else {
 		return t.left.Search(value)
 	}
 }
 
-func (t *TreeNode) Min() int {
+func (t *TreeNode[T]) Min() T {
 	if t.left == nil {
 		return t.val
 	} else {
@@ -44,7 +50,7 @@ func (t *TreeNode) Min() int {
 	}
 }
 
-func (t *TreeNode) Max() int {
+func (t *TreeNode[T]) Max() T {
 	if t.right == nil {
 		return t.val
 	} else {
@@ -52,7 +58,7 @@ func (t *TreeNode) Max() int {
 	}
 }
 
-func (t *TreeNode) InOrderTraversal(slice *[]int) {
+func (t *TreeNode[T]) InOrderTraversal(slice *[]T) {
 	if t.left != nil {
 		t.left.InOrderTraversal(slice)
 	}
@@ -62,7 +68,7 @@ func (t *TreeNode) InOrderTraversal(slice *[]int) {
 	}
 }
 
-func (t *TreeNode) PreOrderTraversal(slice *[]int) {
+func (t *TreeNode[T]) PreOrderTraversal(slice *[]T) {
 	*slice = append(*slice, t.val)
 	if t.left != nil {
 		t.left.PreOrderTraversal(slice)
@@ -72,7 +78,7 @@ func (t *TreeNode) PreOrderTraversal(slice *[]int) {
 	}
 }
 
-func (t *TreeNode) PostOrderTraversal(slice *[]int) {
+func (t *TreeNode[T]) PostOrderTraversal(slice *[]T) {
 	if t.left != nil {
 		t.left.PostOrderTraversal(slice)
 	}
