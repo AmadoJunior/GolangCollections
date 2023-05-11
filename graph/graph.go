@@ -1,5 +1,9 @@
 package graph
 
+import (
+	"github.com/AmadoJunior/GolangCollections/linked_list"
+)
+
 type Vertex struct {
 	key      int
 	adjacent []*Vertex
@@ -60,18 +64,21 @@ func (g *Graph) DFS(v *Vertex, slice *[]int, seen map[int]bool) {
 
 func (g *Graph) BFS(v *Vertex, slice *[]int, seen map[int]bool) {
 	// Create Queue
-	queue := []*Vertex{v}
+	queue := linked_list.NewLinkedList[*Vertex]()
+	queue.Append(v)
 
 	//While Queue Length > 0
-	for len(queue) > 0 {
+	for queue.Length > 0 {
 		//Pop Queue
-		v = queue[0]
-		queue = queue[1:]
+		v = queue.Head.Val
+		queue.Shift()
 		if !seen[v.key] {
 			//Append Value To Result
 			*slice = append(*slice, v.key)
 			//Append To Queue
-			queue = append(queue, v.adjacent...)
+			for _, v := range v.adjacent {
+				queue.Append(v)
+			}
 			//Update Seen
 			seen[v.key] = true
 		}
