@@ -72,3 +72,51 @@ func TestFindValue(t *testing.T) {
 		t.Errorf("Expected nil, but got a node with value: %d", node.val)
 	}
 }
+
+func TestPop(t *testing.T) {
+	list := NewLinkedList()
+
+	list.Append(1)
+	list.Append(2)
+	list.Append(3)
+	list.Pop()
+
+	// Check the length of the list
+	expectedLen := 2
+	if list.GetLen() != expectedLen {
+		t.Errorf("Expected length: %d, but got: %d", expectedLen, list.GetLen())
+	}
+
+	// Check the values in the list
+	expectedValues := []int{1, 2}
+	for i, val := range expectedValues {
+		node := list.GetValue(i)
+		if node.val != val {
+			t.Errorf("Expected value: %d, but got: %d", val, node.val)
+		}
+	}
+}
+
+func TestShift(t *testing.T) {
+	list := NewLinkedList()
+
+	list.Append(1)
+	list.Append(2)
+	list.Append(3)
+	list.Shift()
+
+	// Check the length of the list
+	expectedLen := 2
+	if list.GetLen() != expectedLen {
+		t.Errorf("Expected length: %d, but got: %d", expectedLen, list.GetLen())
+	}
+
+	// Check the values in the list
+	expectedValues := []int{2, 3}
+	for i, val := range expectedValues {
+		node := list.GetValue(i)
+		if node.val != val {
+			t.Errorf("Expected value: %d, but got: %d", val, node.val)
+		}
+	}
+}

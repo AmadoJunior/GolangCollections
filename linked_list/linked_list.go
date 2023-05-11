@@ -3,6 +3,7 @@ package linked_list
 type Node struct {
 	val  int
 	next *Node
+	prev *Node
 }
 
 type LinkedList struct {
@@ -23,6 +24,7 @@ func (l *LinkedList) Prepend(val int) {
 		l.tail = newNode
 	} else {
 		newNode.next = l.head
+		l.head.prev = newNode
 		l.head = newNode
 	}
 }
@@ -35,8 +37,27 @@ func (l *LinkedList) Append(val int) {
 		l.tail = newNode
 	} else {
 		l.tail.next = newNode
+		newNode.prev = l.tail
 		l.tail = newNode
 	}
+}
+
+func (l *LinkedList) Pop() {
+	if l.tail == nil {
+		return
+	}
+	l.length -= 1
+	l.tail = l.tail.prev
+	l.tail.next = nil
+}
+
+func (l *LinkedList) Shift() {
+	if l.head == nil {
+		return
+	}
+	l.length -= 1
+	l.head = l.head.next
+	l.tail.prev = nil
 }
 
 func (l *LinkedList) GetLen() int {
